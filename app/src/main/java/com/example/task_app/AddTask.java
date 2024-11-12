@@ -1,11 +1,16 @@
 package com.example.task_app;
 
+import android.app.TimePickerDialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -56,9 +61,30 @@ public class AddTask extends AppCompatActivity {
                         EditText dateText = findViewById(R.id.editTextDate);
                         CharSequence date =  dayOfMonth +"/"+ month +"/" + year;
                         dateText.setText(date);
+                        dateText.setGravity(Gravity.CENTER);
                     }
                 }
         );
+        EditText timeText = findViewById(R.id.editTextTime);
+        timeText.setText("Choose the time:");
+        timeText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TimePickerDialog timePickerDialog = new TimePickerDialog(v.getContext(),new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        if(minute<10){
+                            timeText.setText(hourOfDay + ":0" + minute);
+                        }
+                        else {
+                            timeText.setText(hourOfDay + ":" + minute);
+                        }
+                        timeText.setGravity(Gravity.CENTER);
+                    }
+                },0,0,true);
+                timePickerDialog.show();
+            }
+        });
     }
 
     public void addDate(View v){
