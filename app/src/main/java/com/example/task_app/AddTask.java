@@ -1,5 +1,7 @@
 package com.example.task_app;
 
+import static java.lang.Math.random;
+
 import android.app.TimePickerDialog;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,8 +10,11 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -87,13 +92,16 @@ public class AddTask extends AppCompatActivity {
         });
     }
 
-    public void addDate(View v){
-        CalendarView calendar = findViewById(R.id.calendarView);
-        EditText date = findViewById(R.id.editTextDate);
-        String dateC = String.valueOf(calendar.getDate());
-        Toast.makeText(this,dateC,Toast.LENGTH_LONG).show();
-        //date.setText(dateC);
-       //calendar.setDate(calendar.getDate());
-        //Log.d("presss", String.valueOf(calendar.getDate()));
+    public void saveTask (View v){
+        EditText timeText = findViewById(R.id.editTextTime);
+        EditText dateText = findViewById(R.id.editTextDate);
+        EditText title = findViewById(R.id.editTextText);
+
+        int id = (int)(Math.random() * 101);
+
+        Task task  = new Task(id,title.getText().toString(),dateText.getText().toString(), timeText.getText().toString());
+        Task.tasks.add(task);
+        Log.d("TaskApp", "New task added: " + task.getTitle());
+        finish();
     }
 }

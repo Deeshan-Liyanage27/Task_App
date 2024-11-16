@@ -3,6 +3,8 @@ package com.example.task_app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,10 +24,21 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        ListView noteListView = findViewById(R.id.listView);
+        ArrayAdapter arrayAdapter = new TaskAdapter(this,Task.tasks);
+        noteListView.setAdapter(arrayAdapter);
     }
 
     public void addTask_window (View v){
         Intent i = new Intent(this, AddTask.class);
         startActivity(i);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ListView noteListView = findViewById(R.id.listView);
+        ArrayAdapter<Task> arrayAdapter = new TaskAdapter(this, Task.tasks);
+        noteListView.setAdapter(arrayAdapter);
     }
 }
