@@ -27,11 +27,17 @@ public class MainActivity extends AppCompatActivity {
         ListView noteListView = findViewById(R.id.listView);
         ArrayAdapter arrayAdapter = new TaskAdapter(this,Task.tasks);
         noteListView.setAdapter(arrayAdapter);
+        loadFromDBToMemory();
     }
 
-    public void addTask_window (View v){
+    public void addTask_window (View v){ // Starts the add task activity
         Intent i = new Intent(this, AddTask.class);
         startActivity(i);
+    }
+
+    public void loadFromDBToMemory(){
+        SQLiteManager db = SQLiteManager.instanceOfDatabase(this);
+        db.populateTaskListArray();
     }
 
     @Override
@@ -39,6 +45,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         ListView noteListView = findViewById(R.id.listView);
         ArrayAdapter<Task> arrayAdapter = new TaskAdapter(this, Task.tasks);
-        noteListView.setAdapter(arrayAdapter);
+        noteListView.setAdapter(arrayAdapter); // Updates the list view tasks
     }
 }

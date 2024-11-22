@@ -55,8 +55,8 @@ public class AddTask extends AppCompatActivity {
         //Disables the text box to enter the date
         EditText dateText = findViewById(R.id.editTextDate);
         dateText.setText("Select Date");
-        dateText.setEnabled(false);
-        dateText.setTextColor(Color.BLACK);
+        dateText.setFocusable(false);
+        dateText.setClickable(false);
 
         //Tracks the user interaction with the calendar and changes the date field accordingly
         CalendarView calendar = findViewById(R.id.calendarView);
@@ -93,15 +93,17 @@ public class AddTask extends AppCompatActivity {
     }
 
     public void saveTask (View v){
+        SQLiteManager db = SQLiteManager.instanceOfDatabase(this);
+        // Get the inputs
         EditText timeText = findViewById(R.id.editTextTime);
         EditText dateText = findViewById(R.id.editTextDate);
         EditText title = findViewById(R.id.editTextText);
 
-        int id = (int)(Math.random() * 101);
+        int id = Task.tasks.size();
 
-        Task task  = new Task(id,title.getText().toString(),dateText.getText().toString(), timeText.getText().toString());
-        Task.tasks.add(task);
-        Log.d("TaskApp", "New task added: " + task.getTitle());
-        finish();
+        Task task  = new Task(id,title.getText().toString(),dateText.getText().toString(), timeText.getText().toString()); // Create a task
+        Task.tasks.add(task); // Add the activity to the list
+        db.addTaskToDataBase(task); // Add the activity to the database;
+        finish(); // Close the activity
     }
 }
