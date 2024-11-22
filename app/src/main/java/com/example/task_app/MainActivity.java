@@ -4,7 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +31,13 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter arrayAdapter = new TaskAdapter(this,Task.tasks);
         noteListView.setAdapter(arrayAdapter);
         loadFromDBToMemory();
+        ListView listView = findViewById(R.id.listView);
+        ProgressBar progress = findViewById(R.id.progressBar2);
+        progress.setIndeterminate(false);
+        progress.setProgress(30);
+        progress.setMax(100);
+
+
     }
 
     public void addTask_window (View v){ // Starts the add task activity
@@ -43,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        ListView noteListView = findViewById(R.id.listView);
+        ListView taskListView = findViewById(R.id.listView);
         ArrayAdapter<Task> arrayAdapter = new TaskAdapter(this, Task.tasks);
-        noteListView.setAdapter(arrayAdapter); // Updates the list view tasks
+        taskListView.setAdapter(arrayAdapter); // Updates the list view tasks
     }
 }

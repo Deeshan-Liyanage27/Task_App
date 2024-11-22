@@ -8,13 +8,14 @@ public class Task {
     private String title;
     private String date;
     private String time;
-    private  boolean status;
+    private  int deleted;
 
-    public Task(int id, String title, String date, String time) {
+    public Task(int id, String title, String date, String time, int deleted) {
         this.id = id;
         this.title = title;
         this.date = date;
         this.time = time;
+        this.deleted = deleted;
     }
 
     public int getId() {
@@ -49,12 +50,24 @@ public class Task {
         this.time = time;
     }
 
-    public boolean isStatus() {
-        return status;
+    public int getDeleted() {
+        return deleted;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setDeleted(int deleted) {
+        this.deleted = deleted;
+    }
+
+    public static ArrayList<Task> nonDeletedNotes()
+    {
+        ArrayList<Task> nonDeleted = new ArrayList<>();
+        for(Task task : tasks)
+        {
+            if(task.getDeleted() == 0)
+                nonDeleted.add(task);
+        }
+
+        return nonDeleted;
     }
 
 }

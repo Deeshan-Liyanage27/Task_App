@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TimePicker;
@@ -30,9 +31,10 @@ import androidx.core.view.WindowInsetsCompat;
 import java.util.Objects;
 
 public class AddTask extends AppCompatActivity {
-
+    private Task selectedTask;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_task);
@@ -101,9 +103,11 @@ public class AddTask extends AppCompatActivity {
 
         int id = Task.tasks.size();
 
-        Task task  = new Task(id,title.getText().toString(),dateText.getText().toString(), timeText.getText().toString()); // Create a task
+        Task task  = new Task(id,title.getText().toString(),dateText.getText().toString(), timeText.getText().toString(),0); // Create a task
         Task.tasks.add(task); // Add the activity to the list
         db.addTaskToDataBase(task); // Add the activity to the database;
         finish(); // Close the activity
     }
+
+
 }

@@ -38,7 +38,9 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 .append("date")
                 .append(" TEXT, ")
                 .append("time")
-                .append(" TEXT)");
+                .append(" TEXT, ")
+                .append("deleted")
+                .append(" INT)");
 
         db.execSQL(sql.toString());
 
@@ -58,6 +60,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
         values.put("title", task.getTitle());
         values.put("date", task.getDate());
         values.put("time", task.getTime());
+        values.put("deleted", task.getDeleted());
 
         db.insert(DATABASE_NAME,null,values);
 
@@ -72,12 +75,26 @@ public class SQLiteManager extends SQLiteOpenHelper {
                     String title = result.getString(2);
                     String date = result.getString(3);
                     String time = result.getString(4);
-                    Task task = new Task(id,title,date,time);
-                    Task.tasks.add(task);
+                    int deleted = result.getInt(5);
+                    if (deleted == 0) {
+                        Task task = new Task(id,title,date,time,deleted);
+                        Task.tasks.add(task);
+                    }
+
                 }
             }
         }
+    }
+    public void updateNoteInDB(Task task)
+    {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("id", task.getId());
+        values.put("title", task.getTitle());
+        values.put("date", task.getDate());
+        values.put("time", task.getTime());
+        values.put("deleted", task.getDeleted());
 
-
+        sqLiteDatabase.update(DATABASE_NAME, values, "id" + " =? ", new String[]{String.valueOf(task.getId())});
     }
 }
