@@ -1,6 +1,8 @@
 package com.example.task_app;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -27,15 +29,12 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        ListView noteListView = findViewById(R.id.listView);
-        ArrayAdapter arrayAdapter = new TaskAdapter(this,Task.tasks);
-        noteListView.setAdapter(arrayAdapter);
-        loadFromDBToMemory();
         ListView listView = findViewById(R.id.listView);
-        ProgressBar progress = findViewById(R.id.progressBar2);
-        progress.setIndeterminate(false);
-        progress.setProgress(30);
-        progress.setMax(100);
+        ArrayAdapter arrayAdapter = new TaskAdapter(this,Task.tasks);
+        listView.setAdapter(arrayAdapter);
+        loadFromDBToMemory();
+
+
 
 
     }
@@ -50,11 +49,40 @@ public class MainActivity extends AppCompatActivity {
         db.populateTaskListArray();
     }
 
+    public void updateProgress(){
+        int tobeCompleted = Task.tasks.size();
+
+        ProgressBar progress = findViewById(R.id.progressBar2);
+        TextView text = findViewById(R.id.progressText);
+        TextView taskNum = findViewById(R.id.tasks);
+        progress.setProgress(25 - tobeCompleted);
+        progress.setMax(25);
+
+        if(tobeCompleted == 0){
+            taskNum.setText("All Tasks are completed!!!");
+            taskNum.setTextSize(25);
+            text.setVisibility(View.INVISIBLE);
+        } else if (tobeCompleted>0 && tobeCompleted<13) {
+            taskNum.setText(String.valueOf(tobeCompleted));
+            text.setText("More Task to complete");
+            progress.setProgressTintList(ColorStateList.valueOf(Color.rgb(255, 193, 7)));
+            progress.setProgressBackgroundTintList(ColorStateList.valueOf(Color.rgb(255, 241, 196)));
+        } else if (tobeCompleted>13) {
+            taskNum.setText(String.valueOf(tobeCompleted));
+            text.setText("More Tasks to complete");
+            progress.setProgressTintList(ColorStateList.valueOf(Color.rgb(244, 67, 54)));
+            progress.setProgressBackgroundTintList(ColorStateList.valueOf(Color.rgb(255, 193, 189)));
+        }
+
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         ListView taskListView = findViewById(R.id.listView);
         ArrayAdapter<Task> arrayAdapter = new TaskAdapter(this, Task.tasks);
         taskListView.setAdapter(arrayAdapter); // Updates the list view tasks
+        updateProgress();
+
     }
 }

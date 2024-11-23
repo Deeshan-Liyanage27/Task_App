@@ -47,8 +47,10 @@ public class TaskAdapter extends ArrayAdapter<Task> {
                 db.updateNoteInDB(task); // Update the database
                 Task.tasks.remove(task); // Remove task from the list
                 notifyDataSetChanged(); // Update the ListView
+
             }
         });
+
 
         return convertView; // Returns the updated view
     }

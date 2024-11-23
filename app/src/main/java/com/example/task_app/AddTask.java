@@ -105,7 +105,7 @@ public class AddTask extends AppCompatActivity {
 
         Task task  = new Task(id,title.getText().toString(),dateText.getText().toString(), timeText.getText().toString(),0); // Create a task
         Task.tasks.add(task); // Add the activity to the list
-        db.addTaskToDataBase(task); // Add the activity to the database;
+        db.addTaskToDataBase(task); // Add the activity to the database
         finish(); // Close the activity
     }
 
