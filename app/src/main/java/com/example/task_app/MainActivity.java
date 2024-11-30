@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             text.setText("More Task to complete");
             progress.setProgressTintList(ColorStateList.valueOf(Color.rgb(255, 193, 7)));
             progress.setProgressBackgroundTintList(ColorStateList.valueOf(Color.rgb(255, 241, 196)));
-        } else if (tobeCompleted>13) {
+        } else if (tobeCompleted>=13) {
             taskNum.setText(String.valueOf(tobeCompleted));
             text.setText("More Tasks to complete");
             progress.setProgressTintList(ColorStateList.valueOf(Color.rgb(244, 67, 54)));

@@ -3,7 +3,6 @@ package com.example.task_app;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -69,7 +68,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public void populateTaskListArray(){
         SQLiteDatabase db = this.getReadableDatabase();
         try (Cursor result = db.rawQuery("SELECT * FROM " + DATABASE_NAME, null)) {
-            if(result.getCount() != 0 ) {
+            if (result.getCount() != 0) {
                 while(result.moveToNext()){
                     int id = result.getInt(1);
                     String title = result.getString(2);

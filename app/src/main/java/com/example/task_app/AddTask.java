@@ -132,7 +132,7 @@ public class AddTask extends AppCompatActivity {
                     }
                     Editable taskText = binding.editTextText.getText();
                     Intent intent = new Intent(v.getContext(), Notification.class);
-                    intent.putExtra("Task", taskText);
+                    intent.putExtra("Task", taskText.toString());
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(v.getContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
 
@@ -140,7 +140,6 @@ public class AddTask extends AppCompatActivity {
                     long time = getTime(hour, min, day, mon, yr);
                     alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time, pendingIntent);
                     Log.d("set", "its set");
-                    Toast.makeText(v.getContext(), "Alarm set Successfully", Toast.LENGTH_SHORT).show();
                     saveTask(v);
                 }
             }
@@ -167,22 +166,20 @@ public class AddTask extends AppCompatActivity {
         }
     }
 
-    private void scheduleNotification(){
-
-    }
-
     public void saveTask (View v){
-        SQLiteManager db = SQLiteManager.instanceOfDatabase(this);
-        // Get the inputs
-        EditText timeText = findViewById(R.id.editTextTime);
-        EditText dateText = findViewById(R.id.editTextDate);
-        EditText title = findViewById(R.id.editTextText);
+        try (SQLiteManager db = SQLiteManager.instanceOfDatabase(this)) {
+            // Get the inputs
+            EditText timeText = findViewById(R.id.editTextTime);
+            EditText dateText = findViewById(R.id.editTextDate);
+            EditText title = findViewById(R.id.editTextText);
 
-        int id = Task.tasks.size();
+            int id = Task.tasks.size();
 
-        Task task  = new Task(id,title.getText().toString(),dateText.getText().toString(), timeText.getText().toString(),0); // Create a task
-        Task.tasks.add(task); // Add the activity to the list
-        db.addTaskToDataBase(task); // Add the activity to the database
+            Task task = new Task(id, title.getText().toString(), dateText.getText().toString(), timeText.getText().toString(), 0); // Create a task
+            Task.tasks.add(task); // Add the activity to the list
+            db.addTaskToDataBase(task); // Add the activity to the database
+        }
+        Toast.makeText(v.getContext(), "Alarm set Successfully", Toast.LENGTH_SHORT).show();
         finish(); // Close the activity
     }
 
