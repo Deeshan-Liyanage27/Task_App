@@ -1,44 +1,36 @@
 package com.example.task_app;
 
-import static java.lang.Math.random;
-
 import android.app.AlarmManager;
+import android.app.Instrumentation;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CalendarView;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.PendingIntentCompat;
+import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.task_app.databinding.ActivityAddTaskBinding;
-import com.example.task_app.databinding.ActivityMainBinding;
 
 import java.util.Calendar;
 import java.util.Objects;
@@ -57,10 +49,10 @@ public class AddTask extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityAddTaskBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        createNotificationChannel();
+        createNotificationChannel(); //Calls the method
 
-        EdgeToEdge.enable(this); //
-        //setContentView(R.layout.activity_add_task);
+        EdgeToEdge.enable(this);
+        
         //Create toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
@@ -121,26 +113,25 @@ public class AddTask extends AppCompatActivity {
                 timePickerDialog.show();
             }
         });
+        // Sets the notification after the save button is clicked
         binding.saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE); // Gets the alarm manager
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    if (!alarmManager.canScheduleExactAlarms()) {
-                        Intent i = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
+                    if (!alarmManager.canScheduleExactAlarms()) { // Check if the user gave permission
+                        Intent i = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM); // Opens the permissions of the app
                         startActivity(i);
                     }
-                    Editable taskText = binding.editTextText.getText();
+                    Editable taskText = binding.editTextText.getText(); // Get the title
+
                     Intent intent = new Intent(v.getContext(), Notification.class);
-                    intent.putExtra("Task", taskText.toString());
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(v.getContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
-
-
+                    intent.putExtra("Task", taskText.toString()); // Set the title
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(v.getContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE); // Create a pending intent
 
                     long time = getTime(hour, min, day, mon, yr);
-                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time, pendingIntent);
-                    Log.d("set", "its set");
-                    saveTask(v);
+                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time, pendingIntent); // Set the reminder
+                    saveTask(v); // Calls the method to add the task to the database
                 }
             }
         });
@@ -161,8 +152,8 @@ public class AddTask extends AppCompatActivity {
             NotificationChannel channel = new NotificationChannel("channel1", name, importance);
             channel.setDescription(description);
 
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class); // Register the channel with the system
+            notificationManager.createNotificationChannel(channel); // Create the channel
         }
     }
 

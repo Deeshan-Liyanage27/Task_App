@@ -16,10 +16,10 @@ public class Notification extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.baseline_task_alt_24)
+                .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(), PendingIntent.FLAG_IMMUTABLE))
                 .setAutoCancel(true)
                 .setContentTitle((intent.getStringExtra("Task")))
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setOngoing(false);
+                .setPriority(NotificationCompat.PRIORITY_HIGH);
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(NOTIFICATION_ID, builder.build());
