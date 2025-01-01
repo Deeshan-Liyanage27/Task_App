@@ -1,7 +1,6 @@
 package com.example.task_app;
 
 import android.app.AlarmManager;
-import android.app.Instrumentation;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -20,12 +19,10 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -38,11 +35,11 @@ import java.util.Objects;
 public class AddTask extends AppCompatActivity {
     private Task selectedTask;
     private ActivityAddTaskBinding binding;
-    private int mon=0;
-    private int day=0;
-    private int yr=0;
-    private int min=0;
-    private int hour=0;
+    private int mon=-1;
+    private int day=-1;
+    private int yr=-1;
+    private int min=-1;
+    private int hour=-1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,21 +114,34 @@ public class AddTask extends AppCompatActivity {
         binding.saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE); // Gets the alarm manager
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    if (!alarmManager.canScheduleExactAlarms()) { // Check if the user gave permission
-                        Intent i = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM); // Opens the permissions of the app
-                        startActivity(i);
+                if(day == -1 || mon == -1 || yr == -1) {
+                    Toast.makeText(v.getContext(), "Select a Date", Toast.LENGTH_SHORT).show();
+                }
+                else if(hour == -1 || min == -1){
+                    Toast.makeText(v.getContext(), "Select a Time", Toast.LENGTH_SHORT).show();
+
+                }
+                else if (binding.editTextText.getText().toString().matches("")) {
+                    Toast.makeText(v.getContext(), "Add a Title", Toast.LENGTH_SHORT).show();
+
+                } else{
+                    AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE); // Gets the alarm manager
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        if (!alarmManager.canScheduleExactAlarms()) { // Check if the user gave permission
+                            Intent i = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM); // Opens the permissions of the app
+                            startActivity(i);
+                        }
+
+                        Editable taskText = binding.editTextText.getText(); // Get the title
+
+                        Intent intent = new Intent(v.getContext(), Notification.class);
+                        intent.putExtra("Task", taskText.toString()); // Set the title
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(v.getContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE); // Create a pending intent
+
+                        long time = getTime(hour, min, day, mon, yr);
+                        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time, pendingIntent); // Set the reminder
+                        saveTask(v); // Calls the method to add the task to the database
                     }
-                    Editable taskText = binding.editTextText.getText(); // Get the title
-
-                    Intent intent = new Intent(v.getContext(), Notification.class);
-                    intent.putExtra("Task", taskText.toString()); // Set the title
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(v.getContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE); // Create a pending intent
-
-                    long time = getTime(hour, min, day, mon, yr);
-                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time, pendingIntent); // Set the reminder
-                    saveTask(v); // Calls the method to add the task to the database
                 }
             }
         });
