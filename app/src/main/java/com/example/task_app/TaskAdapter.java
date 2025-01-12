@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.*;
@@ -47,6 +48,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
                 db.updateNoteInDB(task); // Update the database
                 Task.tasks.remove(task); // Remove task from the list
                 notifyDataSetChanged(); // Update the ListView
+
 
             }
         });

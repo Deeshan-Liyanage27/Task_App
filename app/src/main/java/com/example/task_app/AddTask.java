@@ -1,5 +1,7 @@
 package com.example.task_app;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
 import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -15,6 +17,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -54,12 +57,15 @@ public class AddTask extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).show();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true); // Add the back button
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true); // Add the back button
 
         //match the background color with the color toolbar
         ConstraintLayout main = findViewById(R.id.main);
+        ImageButton back = findViewById(R.id.imageButton);
         int mainColor = main.getSolidColor();
         toolbar.setBackgroundColor(mainColor);
+        back.setBackgroundColor(mainColor);
+        toolbar.setPadding(145,0,0,25);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -182,6 +188,12 @@ public class AddTask extends AppCompatActivity {
         }
         Toast.makeText(v.getContext(), "Alarm set Successfully", Toast.LENGTH_SHORT).show();
         finish(); // Close the activity
+    }
+
+    public void openMain (View v){
+        System.exit(0);
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
     }
 
 

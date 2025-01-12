@@ -81,4 +81,18 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextText"
         app:layout_constraintVertical_bias="0.348" />
 
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="41dp"
+        android:layout_height="35dp"
+        android:backgroundTint="#FFFFFF"
+        android:onClick="openMain"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.019"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/toolbar2"
+        app:layout_constraintVertical_bias="0.413"
+        app:srcCompat="?attr/homeAsUpIndicator" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

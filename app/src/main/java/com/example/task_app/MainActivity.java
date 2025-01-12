@@ -8,6 +8,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -51,8 +52,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         }
-
-
     }
 
     public void addTask_window (View v){ // Starts the add task activity
@@ -78,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
             taskNum.setText("All Tasks are completed!!!");
             taskNum.setTextSize(25);
             text.setVisibility(View.INVISIBLE);
+            progress.setProgressTintList(ColorStateList.valueOf(Color.rgb(16, 240, 90)));
         } else if (tobeCompleted>0 && tobeCompleted<13) {
             taskNum.setText(String.valueOf(tobeCompleted));
             text.setText("More Task to complete");
@@ -90,15 +90,29 @@ public class MainActivity extends AppCompatActivity {
             progress.setProgressBackgroundTintList(ColorStateList.valueOf(Color.rgb(255, 193, 189)));
         }
 
+        refresh();
+
     }
 
-    @Override
+   @Override
     protected void onResume() {
         super.onResume();
         ListView taskListView = findViewById(R.id.listView);
         ArrayAdapter<Task> arrayAdapter = new TaskAdapter(this, Task.tasks);
         taskListView.setAdapter(arrayAdapter); // Updates the list view tasks
         updateProgress();
-
     }
+
+    private void refresh(){
+        final Handler handler = new Handler();
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                updateProgress();
+            }
+        };
+
+        handler.postDelayed(runnable,1000);
+    }
+
 }
