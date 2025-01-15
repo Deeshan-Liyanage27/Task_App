@@ -1,6 +1,8 @@
 package com.example.task_app;
 
 import android.Manifest;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.AlarmManager;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +25,7 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -52,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         }
+
     }
 
     public void addTask_window (View v){ // Starts the add task activity
@@ -72,6 +76,9 @@ public class MainActivity extends AppCompatActivity {
         TextView taskNum = findViewById(R.id.tasks);
         progress.setProgress(25 - tobeCompleted);
         progress.setMax(25);
+        progress.animate().setDuration(1000).rotation(340).start();
+
+
 
         if(tobeCompleted == 0){
             taskNum.setText("All Tasks are completed!!!");
@@ -103,16 +110,18 @@ public class MainActivity extends AppCompatActivity {
         updateProgress();
     }
 
+
     private void refresh(){
         final Handler handler = new Handler();
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 updateProgress();
+
             }
         };
 
-        handler.postDelayed(runnable,1000);
+        handler.postDelayed(runnable,500);
     }
 
 }
