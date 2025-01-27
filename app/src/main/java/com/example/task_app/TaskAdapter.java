@@ -10,6 +10,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.*;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import java.util.List;
 
@@ -51,6 +52,11 @@ public class TaskAdapter extends ArrayAdapter<Task> {
 
 
             }
+        });
+
+        ConstraintLayout layout = convertView.findViewById(R.id.layout);
+        layout.setOnClickListener(v -> {
+
         });
 
 

@@ -1,8 +1,6 @@
 package com.example.task_app;
 
 import android.Manifest;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.app.AlarmManager;
 import android.content.Context;
 import android.content.Intent;
@@ -39,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
         ListView listView = findViewById(R.id.listView);
-        ArrayAdapter arrayAdapter = new TaskAdapter(this,Task.tasks);
-        listView.setAdapter(arrayAdapter);
+        ArrayAdapter<Task> arrayAdapter = new TaskAdapter(this,Task.tasks);
+        listView.setAdapter(arrayAdapter); // Sets the adapter for the list view
         loadFromDBToMemory();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -63,9 +61,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(i);
     }
 
-    public void loadFromDBToMemory(){
-        SQLiteManager db = SQLiteManager.instanceOfDatabase(this);
-        db.populateTaskListArray();
+    public void loadFromDBToMemory(){ // Loads the tasks form the database to the memory
+        try (SQLiteManager db = SQLiteManager.instanceOfDatabase(this)) {
+            db.populateTaskListArray();
+        }
     }
 
     public void updateProgress(){
@@ -76,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         TextView taskNum = findViewById(R.id.tasks);
         progress.setProgress(25 - tobeCompleted);
         progress.setMax(25);
-        progress.animate().setDuration(1000).rotation(340).start();
+        progress.animate().setDuration(1000).rotation(390).start();
 
 
 
@@ -85,12 +84,12 @@ public class MainActivity extends AppCompatActivity {
             taskNum.setTextSize(25);
             text.setVisibility(View.INVISIBLE);
             progress.setProgressTintList(ColorStateList.valueOf(Color.rgb(16, 240, 90)));
-        } else if (tobeCompleted>0 && tobeCompleted<13) {
+        } else if (tobeCompleted<13) {
             taskNum.setText(String.valueOf(tobeCompleted));
             text.setText("More Task to complete");
             progress.setProgressTintList(ColorStateList.valueOf(Color.rgb(255, 193, 7)));
             progress.setProgressBackgroundTintList(ColorStateList.valueOf(Color.rgb(255, 241, 196)));
-        } else if (tobeCompleted>=13) {
+        } else {
             taskNum.setText(String.valueOf(tobeCompleted));
             text.setText("More Tasks to complete");
             progress.setProgressTintList(ColorStateList.valueOf(Color.rgb(244, 67, 54)));

@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.Editable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.CalendarView;
@@ -57,7 +58,7 @@ public class AddTask extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).show();
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true); // Add the back button
+
 
         //match the background color with the color toolbar
         ConstraintLayout main = findViewById(R.id.main);
@@ -139,10 +140,9 @@ public class AddTask extends AppCompatActivity {
                         }
 
                         Editable taskText = binding.editTextText.getText(); // Get the title
-
                         Intent intent = new Intent(v.getContext(), Notification.class);
-                        intent.putExtra("Task", taskText.toString()); // Set the title
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast(v.getContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE); // Create a pending intent
+                        intent.putExtra("TaskTitle", taskText.toString()); // Set the title
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(v.getContext(), (int) System.currentTimeMillis(), intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT); // Create a pending intent
 
                         long time = getTime(hour, min, day, mon, yr);
                         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time, pendingIntent); // Set the reminder

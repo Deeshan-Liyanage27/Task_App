@@ -2,10 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+    android:id="@+id/layout"
     android:layout_width="match_parent"
-    android:padding="10dp"
-    android:layout_height="100dp">
+    android:layout_height="100dp"
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <TextView
         android:id="@+id/cellTitle"
