@@ -18,7 +18,9 @@
         <activity
             android:name=".EditTask"
             android:exported="false"
-            android:theme="@style/Theme.Task_App" />
+            android:theme="@style/Theme.Task_App"
+            android:label="Edit Task"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".AddTask"
             android:exported="false"
@@ -27,6 +29,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

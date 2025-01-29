@@ -1,7 +1,5 @@
 package com.example.task_app;
 
-import static androidx.core.content.ContextCompat.getSystemService;
-
 import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -13,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.Editable;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.CalendarView;
@@ -190,10 +187,8 @@ public class AddTask extends AppCompatActivity {
         finish(); // Close the activity
     }
 
-    public void openMain (View v){
-        System.exit(0);
-        Intent i = new Intent(this, MainActivity.class);
-        startActivity(i);
+    public void goBack(View v){
+        finish();
     }
 
 

@@ -1,6 +1,9 @@
 package com.example.task_app;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,6 +59,21 @@ public class TaskAdapter extends ArrayAdapter<Task> {
 
         ConstraintLayout layout = convertView.findViewById(R.id.layout);
         layout.setOnClickListener(v -> {
+            Intent i = new Intent(getContext(), EditTask.class);
+
+            Bundle bundle = new Bundle();
+
+            bundle.putString("title", task.getTitle());
+            bundle.putString("time", task.getTime());
+            bundle.putString("date", task.getDate());
+            i.putExtras(bundle);
+            getContext().startActivity(i);
+
+            task.setDeleted(1); // Mark task as deleted
+            SQLiteManager db = SQLiteManager.instanceOfDatabase(getContext());
+            db.updateNoteInDB(task); // Update the database
+            Task.tasks.remove(task); // Remove task from the list
+
 
         });
 
