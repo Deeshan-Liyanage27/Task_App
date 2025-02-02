@@ -20,8 +20,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
+import android.window.OnBackInvokedDispatcher;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -130,7 +133,8 @@ public class EditTask extends AppCompatActivity {
             Calendar cal = Calendar.getInstance();
             cal.set(Calendar.YEAR, yr);
             cal.set(Calendar.DAY_OF_MONTH, day);
-            cal.set(Calendar.MONTH, mon);
+            cal.set(Calendar.MONTH, mon-1);
+            Log.d("TAG", String.valueOf(mon));
             long milliTime = cal.getTimeInMillis();
             calendar.setDate(milliTime);
 
@@ -192,8 +196,27 @@ public class EditTask extends AppCompatActivity {
             }
         });
 
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    try (SQLiteManager db = SQLiteManager.instanceOfDatabase(EditTask.this)) {
+
+                        int id = Task.tasks.size();
+
+                        Task task = new Task(id, titleText, dateText, timeText, 0); // Create a task
+                        Task.tasks.add(task); // Add the activity to the list
+                        db.addTaskToDataBase(task); // Add the activity to the database
+                    }
+                }
+                finish();
+            }
+        });
+
 
     }
+
+
 
     private long getTime(int hour, int minute, int day, int month, int year){
         Calendar calendar = Calendar.getInstance();
@@ -231,16 +254,7 @@ public class EditTask extends AppCompatActivity {
         finish(); // Close the activity
     }
     public void goBack (View v){
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE); // Gets the alarm manager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-
-            Editable taskText = binding.title2.getText(); // Get the title
-            Intent intent = new Intent(v.getContext(), Notification.class);
-            intent.putExtra("TaskTitle", taskText.toString()); // Set the title
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(v.getContext(), (int) System.currentTimeMillis(), intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT); // Create a pending intent
-
-            long time = getTime(hour, min, day, mon, yr);
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time, pendingIntent); // Set the reminder
             try (SQLiteManager db = SQLiteManager.instanceOfDatabase(this)) {
 
                 int id = Task.tasks.size();
