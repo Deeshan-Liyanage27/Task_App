@@ -96,6 +96,8 @@ public class EditTask extends AppCompatActivity {
             time.setGravity(Gravity.CENTER);
 
             String[] timeSplit = timeText.split(":",2);
+            hour = Integer.parseInt(timeSplit[0]);
+            min = Integer.parseInt(timeSplit[1]);
             time.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -112,7 +114,7 @@ public class EditTask extends AppCompatActivity {
                             hour = hourOfDay;
                             min = minute;
                         }
-                    },Integer.parseInt(timeSplit[0]),Integer.parseInt(timeSplit[1]),true);
+                    },hour,min,true);
 
                     timePickerDialog.show();
                 }
@@ -134,7 +136,6 @@ public class EditTask extends AppCompatActivity {
             cal.set(Calendar.YEAR, yr);
             cal.set(Calendar.DAY_OF_MONTH, day);
             cal.set(Calendar.MONTH, mon-1);
-            Log.d("TAG", String.valueOf(mon));
             long milliTime = cal.getTimeInMillis();
             calendar.setDate(milliTime);
 
@@ -170,6 +171,7 @@ public class EditTask extends AppCompatActivity {
                 }
                 else if(hour == -1 || min == -1){
                     Toast.makeText(v.getContext(), "Select a Time", Toast.LENGTH_SHORT).show();
+                    Log.d("TAG", String.valueOf(hour));
 
                 }
                 else if (binding.title2.getText().toString().matches("")) {
