@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
             text.setVisibility(View.INVISIBLE);
             progress.setProgressTintList(ColorStateList.valueOf(Color.rgb(16, 240, 90)));
         } else if (tobeCompleted<13) {
+            text.setVisibility(View.VISIBLE);
             taskNum.setText(String.valueOf(tobeCompleted));
             text.setText("More Task to complete");
             progress.setProgressTintList(ColorStateList.valueOf(Color.rgb(255, 193, 7)));
