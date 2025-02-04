@@ -34,7 +34,6 @@ import java.util.Calendar;
 import java.util.Objects;
 
 public class AddTask extends AppCompatActivity {
-    private Task selectedTask;
     private ActivityAddTaskBinding binding;
     private int mon=-1;
     private int day=-1;
@@ -52,7 +51,7 @@ public class AddTask extends AppCompatActivity {
         EdgeToEdge.enable(this);
         
         //Create toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar2);
+        Toolbar toolbar = findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).show();
 
@@ -70,9 +69,10 @@ public class AddTask extends AppCompatActivity {
             return insets;
         });
 
-        //Disables the text box to enter the date
+        //Set the date text
         EditText dateText = findViewById(R.id.editTextDate);
-        dateText.setText("Select Date");
+        dateText.setText(R.string.dateTextStr);
+        //Disable typing in the date text box
         dateText.setFocusable(false);
         dateText.setClickable(false);
 
@@ -87,30 +87,35 @@ public class AddTask extends AppCompatActivity {
                         day = dayOfMonth;
                         mon = month-1;
                         yr = year;
-                        dateText.setText(date);
-                        dateText.setGravity(Gravity.CENTER);
+                        dateText.setText(date); //Set the text
+                        dateText.setGravity(Gravity.CENTER); //Set the text to the middle
                     }
                 }
         );
+        //Set the time text
         EditText timeText = findViewById(R.id.editTextTime);
-        timeText.setText("Choose the time:");
+        timeText.setText(R.string.timeTextStr);
+
         timeText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TimePickerDialog timePickerDialog = new TimePickerDialog(v.getContext(),new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        //add 0 to the time text if it is less than 10
                         if(minute<10){
-                            timeText.setText(hourOfDay + ":0" + minute);
+                            String timeStr1 = hourOfDay + ":0" + minute;
+                            timeText.setText(timeStr1);
                         }
                         else {
-                            timeText.setText(hourOfDay + ":" + minute);
+                            String timeStr2 = hourOfDay + ":" + minute;
+                            timeText.setText(timeStr2);
                         }
                         timeText.setGravity(Gravity.CENTER);
                         hour = hourOfDay;
                         min = minute;
                     }
-                },0,0,true);
+                },0,0,true); //Keeps the default time as 00:00
                 timePickerDialog.show();
             }
         });
@@ -118,6 +123,7 @@ public class AddTask extends AppCompatActivity {
         binding.saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Check if date or time is empty
                 if(day == -1 || mon == -1 || yr == -1) {
                     Toast.makeText(v.getContext(), "Select a Date", Toast.LENGTH_SHORT).show();
                 }
@@ -129,6 +135,7 @@ public class AddTask extends AppCompatActivity {
                     Toast.makeText(v.getContext(), "Add a Title", Toast.LENGTH_SHORT).show();
 
                 } else{
+                    // Sets the reminder
                     AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE); // Gets the alarm manager
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                         if (!alarmManager.canScheduleExactAlarms()) { // Check if the user gave permission
@@ -151,12 +158,14 @@ public class AddTask extends AppCompatActivity {
 
     }
 
+    //This method returns the time in milliseconds to set the reminder
     private long getTime(int hour, int minute, int day, int month, int year){
         Calendar calendar = Calendar.getInstance();
         calendar.set(year,month,day,hour,minute);
         return calendar.getTimeInMillis();
     }
 
+    //This method creates the notification channel
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "Task";
@@ -170,6 +179,7 @@ public class AddTask extends AppCompatActivity {
         }
     }
 
+    //This method adds the task to the database
     public void saveTask (View v){
         try (SQLiteManager db = SQLiteManager.instanceOfDatabase(this)) {
             // Get the inputs
@@ -187,6 +197,7 @@ public class AddTask extends AppCompatActivity {
         finish(); // Close the activity
     }
 
+    //This method gives functionality to the back button
     public void goBack(View v){
         finish();
     }

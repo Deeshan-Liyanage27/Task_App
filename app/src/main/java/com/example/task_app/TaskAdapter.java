@@ -3,16 +3,15 @@ package com.example.task_app;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.annotation.*;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import java.util.List;
@@ -39,23 +38,25 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         CheckBox deleteCheckBox = convertView.findViewById(R.id.checkBox3);
 
         // Set to display
-        title.setText(task.getTitle());
-        date.setText((task.getDate()));
-        time.setText(task.getTime());
-
-        deleteCheckBox.setChecked(false);
-        deleteCheckBox.setOnClickListener(v -> {
-
-            if (task != null) {
-                task.setDeleted(1); // Mark task as deleted
-                SQLiteManager db = SQLiteManager.instanceOfDatabase(getContext());
-                db.updateNoteInDB(task); // Update the database
-                Task.tasks.remove(task); // Remove task from the list
-                notifyDataSetChanged(); // Update the ListView
+        if (task != null) {
+            title.setText(task.getTitle());
+            date.setText((task.getDate()));
+            time.setText(task.getTime());
+            deleteCheckBox.setChecked(false);
+            deleteCheckBox.setOnClickListener(v -> {
 
 
-            }
-        });
+                try (SQLiteManager db = SQLiteManager.instanceOfDatabase(getContext())) {
+                    task.setDeleted(1); // Mark task as deleted
+                    db.updateNoteInDB(task); // Update the database
+                    Task.tasks.remove(task); // Remove task from the list
+                    notifyDataSetChanged(); // Update the ListView
+                }
+
+
+
+            });
+        }
 
         ConstraintLayout layout = convertView.findViewById(R.id.layout);
         layout.setOnClickListener(v -> {
@@ -63,18 +64,21 @@ public class TaskAdapter extends ArrayAdapter<Task> {
 
             Bundle bundle = new Bundle();
 
-            bundle.putString("title", task.getTitle());
-            bundle.putString("time", task.getTime());
-            bundle.putString("date", task.getDate());
-            i.putExtras(bundle);
-            getContext().startActivity(i);
-
-            task.setDeleted(1); // Mark task as deleted
-            SQLiteManager db = SQLiteManager.instanceOfDatabase(getContext());
-            db.updateNoteInDB(task); // Update the database
-            Task.tasks.remove(task); // Remove task from the list
+            //get the title, time and date of the selected task
+            if (task != null) {
+                bundle.putString("title", task.getTitle());
+                bundle.putString("time", task.getTime());
+                bundle.putString("date", task.getDate());
+                i.putExtras(bundle);
+                getContext().startActivity(i);
 
 
+                try (SQLiteManager db = SQLiteManager.instanceOfDatabase(getContext())) {
+                    task.setDeleted(1); // Mark task as deleted
+                    db.updateNoteInDB(task); // Update the database
+                    Task.tasks.remove(task); // Remove task from the list
+                }
+            }
         });
 
 

@@ -8,11 +8,11 @@
     tools:context=".EditTask">
 
     <Button
-        android:id="@+id/deleteButton"
+        android:id="@+id/doneButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="#6e70b4"
-        android:text="MARK AS DONE"
+        android:text="@string/mark_as_done"
         android:textColorLink="#6e70b4"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -53,10 +53,12 @@
         android:layout_marginEnd="16dp"
         android:ems="10"
         android:focusable="false"
+        android:autofillHints="Time"
         app:layout_constraintBottom_toTopOf="@+id/title2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calendarView3"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="LabelFor,TextFields" />
 
     <EditText
         android:id="@+id/editTextDate3"
@@ -66,12 +68,14 @@
         android:ems="10"
         android:enabled="true"
         android:inputType="date"
+        android:autofillHints="Date"
         app:layout_constraintBottom_toTopOf="@+id/title2"
         app:layout_constraintEnd_toStartOf="@+id/editTextTime3"
         app:layout_constraintHorizontal_bias="0.307"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calendarView3"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="LabelFor" />
 
     <EditText
         android:id="@+id/title2"
@@ -79,17 +83,19 @@
         android:layout_height="44dp"
         android:layout_marginBottom="172dp"
         android:ems="10"
+        android:hint="@string/Task_Hint"
+        android:autofillHints="Name of the Task"
         android:inputType="text|textShortMessage|textAutoComplete|textAutoCorrect"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/saveButton7"
+        android:id="@+id/saveButton2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="#4CAF50"
-        android:text="SAVE"
+        android:text="@string/save"
         android:textColorLink="#4CAF50"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -104,6 +110,7 @@
         android:layout_height="35dp"
         android:backgroundTint="#FFFFFF"
         android:onClick="goBack"
+        android:contentDescription="@string/back_button"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

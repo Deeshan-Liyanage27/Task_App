@@ -29,21 +29,27 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        //Create the list view
         ListView listView = findViewById(R.id.listView);
         ArrayAdapter<Task> arrayAdapter = new TaskAdapter(this,Task.tasks);
         listView.setAdapter(arrayAdapter); // Sets the adapter for the list view
-        loadFromDBToMemory();
+        loadFromDBToMemory(); // Loads the tasks from the database to the memory
 
+        //Checks for user permissions
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            NotificationManagerCompat noti = NotificationManagerCompat.from(this);
-            if(!noti.areNotificationsEnabled()) {
+            NotificationManagerCompat notification = NotificationManagerCompat.from(this);
+            if(!notification.areNotificationsEnabled()) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 0);
             }
 
@@ -56,7 +62,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void addTask_window (View v){ // Starts the add task activity
+    //This method is used to start the add task activity when the button add button is pressed
+    public void addTask_window (View v){
         Intent i = new Intent(this, AddTask.class);
         startActivity(i);
     }
@@ -67,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //This method is used to update the progress bar
     public void updateProgress(){
         int tobeCompleted = Task.tasks.size();
 
@@ -80,19 +88,19 @@ public class MainActivity extends AppCompatActivity {
 
 
         if(tobeCompleted == 0){
-            taskNum.setText("All Tasks are completed!!!");
+            taskNum.setText(R.string.NoTasks);
             taskNum.setTextSize(25);
             text.setVisibility(View.INVISIBLE);
             progress.setProgressTintList(ColorStateList.valueOf(Color.rgb(16, 240, 90)));
         } else if (tobeCompleted<13) {
             text.setVisibility(View.VISIBLE);
             taskNum.setText(String.valueOf(tobeCompleted));
-            text.setText("More Task to complete");
+            text.setText(R.string.HaveTasks);
             progress.setProgressTintList(ColorStateList.valueOf(Color.rgb(255, 193, 7)));
             progress.setProgressBackgroundTintList(ColorStateList.valueOf(Color.rgb(255, 241, 196)));
         } else {
             taskNum.setText(String.valueOf(tobeCompleted));
-            text.setText("More Tasks to complete");
+            text.setText(R.string.HaveTasks);
             progress.setProgressTintList(ColorStateList.valueOf(Color.rgb(244, 67, 54)));
             progress.setProgressBackgroundTintList(ColorStateList.valueOf(Color.rgb(255, 193, 189)));
         }
@@ -111,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    //This method is used to refresh the progress bar every 500 milliseconds
     private void refresh(){
         final Handler handler = new Handler();
         final Runnable runnable = new Runnable() {

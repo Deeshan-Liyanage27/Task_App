@@ -58,16 +58,5 @@ public class Task {
         this.deleted = deleted;
     }
 
-    public static ArrayList<Task> nonDeletedNotes()
-    {
-        ArrayList<Task> nonDeleted = new ArrayList<>();
-        for(Task task : tasks)
-        {
-            if(task.getDeleted() == 0)
-                nonDeleted.add(task);
-        }
-
-        return nonDeleted;
-    }
 
 }

@@ -42,4 +42,17 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string name="dateTextStr">Select Date</string>
+    <string name="timeTextStr">Choose the time:</string>
+    <string name="NoTasks">All Tasks are completed</string>
+    <string name="HaveTasks">More Tasks to complete</string>
+    <string name="save">SAVE</string>
+    <string name="back_button">Back Button</string>
+    <string name="Task_Hint">Enter your task here</string>
+    <string name="title">Title</string>
+    <string name="time">Time</string>
+    <string name="date">Date</string>
+    <string name="addTask_Description">Press here to Add a Task</string>
+    <string name="ProgressNum">25</string>
+    <string name="mark_as_done">MARK AS DONE</string>
 </resources>
